@@ -2,6 +2,10 @@
 
 ## commands
 
+Getting Started:
+
+.env file with NETLIFY_ACCESS_TOKEN === your personal access token
+
 ### list sites
 
 `npm start -- list sites`
