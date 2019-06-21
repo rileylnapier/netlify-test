@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index",
+    "start": "node bin/riley-cli",
     "test": "jest"
   },
   "keywords": [],
@@ -15,8 +15,7 @@
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "dotenv": "^8.0.0",
-    "netlify": "^2.4.6",
-    "yargs": "^13.2.4"
+    "netlify": "^2.4.6"
   },
   "bin": {
     "riley-cli": "./bin/riley-cli"
