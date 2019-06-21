@@ -1,51 +1,77 @@
-# netlify-test
+# Riley CLI
 
-## commands
+Riley CLI for Netlify API
 
-Getting Started:
+## Development / Testing
 
-.env file with NETLIFY_ACCESS_TOKEN === your personal access token
+run `npm link` in root directory to get `riley-cli` as a CLI command
 
-### list sites
+## Getting Started
 
-`npm start -- list sites`
-
-example output
-
-```
-[
-  {
-    "id": "SITEID",
-    "site_id": "SITEID",
-    "name": "blu-muse",
-    "url": "http://blu-muse.netlify.com",
-    "admin_url": "https://app.netlify.com/sites/blu-muse"
-  }
-]
-```
-
-### list functions
-
-`npm start -- list functions [siteName]`
+Make sure to set your env NETLIFY_ACCESS_TOKEN in the root directory .env
+Generate an Access Token here: https://app.netlify.com/user/applications/personal
 
 ```
-{
-  "siteName": "blu-muse",
-  "functions": [
-    {
-      "n": "hello-world",
-      "d": "",
-      "id": "",
-      "a": "",
-      "c": "2019-06-14T14:45:13.208Z",
-      "r": "js",
-      "s": 317
-    }
-  ]
-}
-
+echo 'NETLIFY_ACCESS_TOKEN={{YOUR_ACCESS_TOKEN}}' >> .env
 ```
 
-### delete site
+The CLI is broken into smaller sections called `commands` or `functional areas`. The following functional areas are supported: `sites`, `functions`.
 
-`npm start -- delete site [siteId]`
+Other functional areas to be supported: `builds`, `deploys`, `hooks`, etc...
+
+> These are 1:1 mapping with the Netlify Open Api.
+
+### Sites CLI
+
+- `riley-cli sites <command>`
+- `riley-cli sites --help`
+
+#### List Sites
+
+Available Commands: `list`, `list-deploys`, `delete`
+
+```
+Options:
+  -i, --site-id <id>  Filter By `Site Id`
+  -h, --help          output usage information
+
+Examples:
+
+      # List all sites
+      $ riley-cli sites
+
+      # List deploys for all sites
+      $ riley-cli sites list-deploys
+
+      # List deploys for a specific site
+      $ riley-cli sites list-deploys -i {{site_id}}
+      $ riley-cli sites list-deploys --site-id {{site_id}}
+
+      # Delete a site
+      $ riley-cli sites delete -i {{site_id}}
+      $ riley-cli sites delete --site-id {{site_id}}
+```
+
+### Functions CLI
+
+Available Commands: `list`
+
+```
+Options:
+  -i, --site-id <id>      Filter By `Site Id`
+  -n, --site-name <name>  Filter By `Site Name`
+  -h, --help              output usage information
+
+Examples:
+
+      # List functions for all sites
+      $ riley-cli functions list
+
+      # List functions by site_id
+      $ riley-cli functions list -i {{site_id}}
+      $ riley-cli functions list --site-id {{site_id}}
+
+      # List functions by site_name
+      $ riley-cli functions list -n {{site_name}}
+      $ riley-cli functions list --site-name {{site_name}}
+```

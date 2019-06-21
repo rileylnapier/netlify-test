@@ -1,7 +1,7 @@
-const list = require("./list");
-const del = require("./delete");
+const sites = require("./sites");
+const functions = require("./functions");
 
 module.exports = {
-  list,
-  delete: del
+  sites,
+  functions
 };

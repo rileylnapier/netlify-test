@@ -1,0 +1,98 @@
+#!/usr/bin/env node
+require("dotenv").config();
+const packageJson = require("../package.json");
+const commands = require("../src/commands");
+const { log } = require("../src/utils");
+const commander = require("commander");
+const camelCase = require("camel-case");
+
+commander.version(packageJson.version);
+
+const errors = {
+  invalidCommand: cmd => `Invalid Command: ${cmd}.`,
+  tryRunning: cmd => `Invalid Command.  Try running: "riley-cli ${cmd} --help`,
+  helpCommand: cmd => `Missing "${cmd}" argument. `
+};
+
+//sites
+commander
+  .command("sites <command>")
+  .description("Netlify Sites CLI")
+  .option("-i, --site-id <id>", "Filter By `Site Id`")
+  .action((cmd, options) => {
+    const command = commands.sites[camelCase(cmd)];
+
+    if (!command) {
+      return log.error(errors.tryRunning(`sites`));
+    }
+
+    try {
+      command(options);
+    } catch (ex) {
+      log.error("Unexpected Error:", ex);
+    }
+  })
+  .on("--help", function() {
+    console.log("");
+    console.log("Examples:");
+    console.log(`
+      # List all sites
+      $ riley-cli sites
+
+      # Get a sites
+      $ riley-cli sites get -i {{site_id}}
+      $ riley-cli sites get --site-id {{site_id}}
+
+      # List deploys for all sites
+      $ riley-cli sites list-deploys
+
+      # List deploys for a specific site
+      $ riley-cli sites list-deploys -i {{site_id}}
+      $ riley-cli sites list-deploys --site-id {{site_id}}
+
+      # Delete a site
+      $ riley-cli sites delete -i {{site_id}}
+      $ riley-cli sites delete --site-id {{site_id}}
+    `);
+  });
+
+//functions
+commander
+  .command("functions <command>")
+  .description("Netlify Functions CLI")
+  .option("-i, --site-id <id>", "Filter By `Site Id`")
+  .action((cmd, options) => {
+    const command = commands.functions[camelCase(cmd)];
+    if (!command) {
+      return log.error(errors.tryRunning("functions"));
+    }
+
+    try {
+      command(options);
+    } catch (ex) {
+      log.error("Unexpected Error:", ex);
+    }
+  })
+  .on("--help", function() {
+    console.log("");
+    console.log("Examples:");
+    console.log(`
+      # List functions for all sites
+      $ riley-cli functions list
+
+      # List functions by site_id
+      $ riley-cli functions list -i {{site_id}}
+      $ riley-cli functions list --site-id {{site_id}}
+    `);
+  });
+
+if (!process.env.NETLIFY_ACCESS_TOKEN) {
+  log.error(`
+      Missing Netlify Access Token.
+      Generate an Access Token here: https://app.netlify.com/user/applications/personal
+      Then run: echo 'NETLIFY_ACCESS_TOKEN={{YOUR_ACCESS_TOKEN}}' >> .env
+  `);
+  process.exit(0);
+}
+
+commander.parse(process.argv);

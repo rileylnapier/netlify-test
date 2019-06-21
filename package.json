@@ -5,15 +5,35 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "netlify": "^2.4.6"
+    "camel-case": "^3.0.0",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "dotenv": "^8.0.0",
+    "netlify": "^2.4.6",
+    "yargs": "^13.2.4"
+  },
+  "bin": {
+    "riley-cli": "./bin/riley-cli"
   },
   "devDependencies": {
-    "dotenv": "^8.0.0"
+    "jest": "^24.8.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!coverage/**"
+    ],
+    "coverageReporters": [
+      "text-summary",
+      "html"
+    ]
   }
 }
